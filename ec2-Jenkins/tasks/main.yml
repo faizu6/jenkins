@@ -1,0 +1,61 @@
+---
+- hosts: localhost
+  tasks:
+    # create a security group
+    - ec2_group:
+          vpc_id: vpc-03b63bf99652de6a0
+          region: ap-southeast-1
+          name: "{{ name }}-jenkins-sg"
+          description: security group with all traffic allow
+          rules:
+          - proto: tcp
+            ports:
+              - 8080
+            cidr_ip: 0.0.0.0/0
+            rule_desc: allow all on port 8080
+      register: sg_info
+
+    - debug:
+        msg:  "{{ sg_info.group_id }}"
+
+    # create an instance
+    - ec2:
+        key_name: new-keypair
+        instance_type: t2.micro
+        instance_tags:
+           Name: "{{ name }}-jenkins-server"
+        image: ami-0ff89c4ce7de192ea
+        group_id: "{{ sg_info.group_id }}"
+        region: ap-southeast-1
+        count_tag:
+           Name: "{{ name }}-jenkins-server"
+        exact_count: 1
+        vpc_subnet_id: subnet-02ce50a9cc336f6ed
+        assign_public_ip: yes
+        wait: yes
+        user_data: |
+               #!/bin/sh
+               sudo yum update
+               sudo wget -O /etc/yum.repos.d/jenkins.repo \
+                    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+               sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+               sudo yum upgrade
+               sudo amazon-linux-extras install java-openjdk11 -y
+               sudo yum install -y jenkins
+               sudo systemctl enable jenkins.service
+               sudo systemctl start jenkins.service
+      register: ec2_info
+
+
+    - debug:
+        msg: "{{ ec2_info.tagged_instances[0].public_ip }}"
+
+
+    # route53; creating a record set
+    - community.aws.route53:
+        state: present
+        zone: faizanulhaqtest.ml
+        record: "{{ name }}.faizanulhaqtest.ml"
+        type: A
+        value: "{{ ec2_info.tagged_instances[0].public_ip }}"
+        ttl: 300
