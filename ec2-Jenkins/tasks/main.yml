@@ -1,5 +1,6 @@
 ---
 - hosts: localhost
+  become: true
   tasks:
     # create a security group
     - ec2_group:
