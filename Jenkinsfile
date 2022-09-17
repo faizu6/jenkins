@@ -10,7 +10,9 @@ pipeline {
                 }
             }
             steps {
-                sh 'ansible-playbook ec2-user/tasks/main.yml -e name:dev
+                sh '''
+                ansible-playbook ec2-user/tasks/main.yml -e name:dev
+                '''
             }
         }
     }
