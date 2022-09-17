@@ -1,11 +1,16 @@
 pipeline {
-    agent { label 'prod-slave' } 
+    agent any
     stages {
-        stage('run tasks') {
+        stage('Back-end') {
+            agent {
+                docker { 
+                    image 'faizu6/ansible-img1:17'
+                    args "--user root --privileged"
+                    
+                }
+            }
             steps {
-                sh '''
-                  pwd
-                   '''
+                sh 'ansible-playbook ec2-user/tasks/main.yml -e name:dev
             }
         }
     }
