@@ -11,7 +11,7 @@ pipeline {
             }
             steps {
                 sh '''
-                ansible-playbook ec2-user/tasks/main.yml -e name:dev
+                ansible-playbook ec2-Jenkins/tasks/main.yml -e name:dev
                 '''
             }
         }
