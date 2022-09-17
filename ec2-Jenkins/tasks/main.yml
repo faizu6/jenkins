@@ -52,7 +52,7 @@
 
 
     # route53; creating a record set
-    - community.aws.route53:
+    - route53:
         state: present
         zone: faizanulhaqtest.ml
         record: "{{ name }}.faizanulhaqtest.ml"
