@@ -4,7 +4,7 @@ pipeline {
         stage('Back-end') {
             agent {
                 docker { 
-                    image 'faizu6/ansible-img1:17'
+                    image 'faizu6/ansible-img1:2'
                     args "--user root --privileged"
                     
                 }
