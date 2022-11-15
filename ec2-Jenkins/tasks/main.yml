@@ -4,8 +4,8 @@
   tasks:
     # create a security group
     - ec2_group:
-          vpc_id: vpc-03b63bf99652de6a0
-          region: ap-southeast-1
+          vpc_id: vpc-0988be901ef00bb64
+          region: ap-south-1
           name: "{{ name }}-jenkins-sg"
           description: security group with all traffic allow
           rules:
@@ -31,7 +31,7 @@
         count_tag:
            Name: "{{ name }}-jenkins-server"
         exact_count: 1
-        vpc_subnet_id: subnet-02ce50a9cc336f6ed
+        vpc_subnet_id: subnet-0e527232c3edba061                                                                                                                                                               
         assign_public_ip: yes
         wait: yes
         user_data: |
