@@ -6,7 +6,7 @@
     - ec2_group:
           vpc_id: vpc-0988be901ef00bb64
           region: ap-south-1
-          name: "{{ name }}-jenkins-sg"
+          name: "{{ Name }}-jenkins-sg"
           description: security group with all traffic allow
           rules:
           - proto: tcp
@@ -23,13 +23,12 @@
     - ec2:
         key_name: new-keypair
         instance_type: t2.micro
-        instance_tags:
-           Name: "{{ name }}-jenkins-server"
+        name: "{{ Name }}-jenkins-server"
         image: ami-0ff89c4ce7de192ea
         group_id: "{{ sg_info.group_id }}"
         region: ap-southeast-1
         count_tag:
-           Name: "{{ name }}-jenkins-server"
+           name: "{{ Name }}-jenkins-server"
         exact_count: 1
         vpc_subnet_id: subnet-0e527232c3edba061                                                                                                                                                               
         assign_public_ip: yes
