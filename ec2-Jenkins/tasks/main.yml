@@ -6,7 +6,8 @@
     - ec2_group:
           vpc_id: vpc-0988be901ef00bb64
           region: ap-south-1
-          name: "{{ Name }}-jenkins-sg"
+          instance_tags:
+            name: "{{ Name }}-jenkins-sg"
           description: security group with all traffic allow
           rules:
           - proto: tcp
@@ -17,7 +18,7 @@
       register: sg_info
 
     - debug:
-        msg:  "{{ sg_info.group_id }}"
+        msg: "{{ sg_info.group_id }}"
 
     # create an instance
     - ec2:
